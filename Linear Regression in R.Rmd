@@ -1,5 +1,6 @@
 ---
 title: "Linear Regression in R"
+Name: Rafiqua Ferdousi
 output: html_document
 ---
 
