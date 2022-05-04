@@ -1,0 +1,66 @@
+---
+title: "Linear Regression in R"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Clear environment
+rm(list = ls()) 
+
+# INSTALL AND LOAD PACKAGES ################################
+# Installs pacman ("package manager") if needed
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(pacman, dplyr, ggplot2, ggthemes, 
+               ggvis, httr, lubridate, plotly, rio, rmarkdown, 
+               stringr, tidyr) 
+
+library(datasets)  # Load/unload base packages manually
+```
+
+```{r}
+head(iris)
+
+# define model
+simple_model <- lm(Petal.Length ~ Petal.Width, data = iris)
+
+# Use plot() function to create diagnostic plots
+plot(simple_model)
+
+############# Linearity 
+plot(simple_model,1)
+
+# Or plot the observed versus predicted values (again ideally a horizontal line)
+plot(simple_model$fitted.values, simple_model$model$BMI)
+
+############# Normality of residuals
+hist(simple_model$residuals)
+plot(simple_model, 2)
+
+
+############# Testing the Homoscedasticity Assumption
+plot(simple_model, 3)
+
+# Breusch-Pagan test
+lmtest::bptest(simple_model)
+
+# There is also a White's test if you are interested. BP test is more popular
+
+# Test for autocorrelation (Violations of independence)
+acf(uspop, lag.max = 15, plot = TRUE)
+
+# Collinearity
+model_corr_matrix <- cor(iris %>% 
+                           select(Petal.Length, Petal.Width, Sepal.Length),
+                         use = "pairwise.complete.obs")
+model_corr_matrix
+corrplot::corrplot(model_corr_matrix)
+
+# Multicollinearity
+# Define a regression model and save the model object as "BMI3_model"
+Another_model <- lm(Petal.Length ~ Petal.Width + Sepal.Length, data = iris)
+
+# Use the variance inflation factor from the car package
+car::vif(Another_model)
+# VIF >5 (some say 10) is a huge problem
+```
