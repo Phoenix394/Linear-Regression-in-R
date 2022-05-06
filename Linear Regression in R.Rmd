@@ -45,7 +45,7 @@ plot(simple_model, 3)
 # Breusch-Pagan test
 lmtest::bptest(simple_model)
 
-# There is also a White's test if you are interested. BP test is more popular
+# There is also a White's test. However, BP test is more popular
 
 # Test for autocorrelation (Violations of independence)
 acf(uspop, lag.max = 15, plot = TRUE)
